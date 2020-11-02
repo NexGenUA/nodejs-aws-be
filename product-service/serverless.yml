@@ -34,3 +34,10 @@ functions:
             parameters:
               paths:
                 productId: true
+  swagger:
+    handler: handler.swagger
+    events:
+      - http:
+          path: doc
+          method: get
+          cors: true
