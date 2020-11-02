@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "title": "dev-aws-be-nexgenua"
   },
-  "host": "agk3tj92m9.execute-api.eu-west-1.amazonaws.com",
+  "host": "70t3w2t0ni.execute-api.eu-west-1.amazonaws.com",
   "basePath": "/dev",
   "paths": {
     "/products": {

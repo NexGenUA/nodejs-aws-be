@@ -41,3 +41,14 @@ functions:
           path: doc
           method: get
           cors: true
+  weather:
+    handler: handler.getWeather
+    events:
+      - http:
+          path: weather/{id}
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
