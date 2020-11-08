@@ -1,31 +1,25 @@
 import { Client } from 'pg';
+import { dbOptions } from './common/db-options';
 
-const {PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD} = process.env;
-const dbOptions = {
-  host: PG_HOST,
-  port: PG_PORT,
-  database: PG_DATABASE,
-  user: PG_USERNAME,
-  password: PG_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false
-  },
-  connectionTimeoutMillis: 5000
-}
+export const getProductById = async event => {
+  console.log('getProductById EVENT: ', event);
 
-export const getProductById = async (event) => {
   const client = new Client(dbOptions);
-  await client.connect();
 
   let statusCode;
   let body;
 
   try {
+    await client.connect();
+
     const {id} = event.pathParameters;
     const isUuid = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(id);
     if (isUuid) {
-      const {rows} = await client.query(`SELECT * FROM products WHERE id=$1`, [id]);
-      const [product] = rows.length ? rows : null;
+      const {rows} = await client.query(`
+        SELECT p.id, p.description, p.price, p.title, s.count FROM products p 
+          LEFT JOIN stock s on p.id=s.product_id WHERE p.id=$1
+      `, [id]);
+      const [product] = rows.length ? rows : [null];
       statusCode = product ? 200 : 404;
       body = product ? JSON.stringify(product) : 'Not Found';
     } else {
@@ -37,6 +31,7 @@ export const getProductById = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
+        'Content-Type': statusCode === 200 ? 'application/json' : 'text/html',
       },
       statusCode,
       body
@@ -47,6 +42,7 @@ export const getProductById = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'text/html',
       },
       statusCode: 500,
       body: 'Internal Server Error'
