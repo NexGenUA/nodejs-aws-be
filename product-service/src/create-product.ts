@@ -1,18 +1,20 @@
 import { connectDb } from './common/connect-db';
 import { res } from './common/res';
+import { Client } from 'pg';
+import { Product } from './models/product.model';
 
 export const createProduct = async event => {
   console.log('createProduct EVENT: ', event);
 
-  const client = await connectDb();
+  const client: Client = await connectDb();
 
   if (!client) {
     return res().sendInternal();
   }
 
   try {
-    const entity = JSON.parse(event.body);
-    const {title, description, price, count} = entity;
+    const entity: Product = JSON.parse(event.body);
+    const { title, description, price, count } = entity;
     await client.query('BEGIN');
     const insertProduct = 'INSERT INTO products(title, description, price) values($1, $2, $3) RETURNING id';
     const { rows: [{id}] } = await client.query(insertProduct, [title, description, price]);
@@ -40,7 +42,7 @@ export const createProduct = async event => {
 
     return res().sendInternal();
   } finally {
-    client.end();
+    await client.end();
   }
 };
 

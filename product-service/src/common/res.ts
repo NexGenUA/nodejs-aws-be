@@ -1,8 +1,13 @@
-class Response {
+import { Headers, HttpClassResponse, HttpResponse, ResponseType } from '../models/response.model';
+
+class Response implements HttpClassResponse {
+  _headers: Headers;
+  _statusCode: number;
+  _response: HttpResponse;
+
   constructor() {
     this._headers = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
     };
 
     this._statusCode = 200;
@@ -13,23 +18,23 @@ class Response {
     };
   }
 
-  send(string) {
-    this._response.body = string;
+  send(message: string): HttpResponse {
+    this._response.body = message;
     this.headers({
       'Content-Type': 'text/html'
     });
     return this._response;
   }
 
-  json(object) {
-    this._response.body = JSON.stringify(object);
+  json(responseObject: ResponseType): HttpResponse {
+    this._response.body = JSON.stringify(responseObject);
     this.headers({
       'Content-Type': 'application/json'
     });
     return this._response;
   }
 
-  headers(headers) {
+  headers(headers: Headers): HttpClassResponse {
     this._headers = (
       this._response.headers = {
       ...this._headers,
@@ -38,12 +43,12 @@ class Response {
     return this;
   }
 
-  status(status) {
+  status(status: number): HttpClassResponse {
     this._response.statusCode = status;
     return this;
   }
 
-  sendInternal() {
+  sendInternal(): HttpResponse {
     this._response.body = 'Internal Server Error';
     this.headers({
       'Content-Type': 'text/html'
@@ -53,4 +58,4 @@ class Response {
   }
 }
 
-export const res = () => new Response();
+export const res = (): HttpClassResponse => new Response();

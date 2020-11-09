@@ -1,10 +1,11 @@
 import { connectDb } from './common/connect-db';
 import { res } from './common/res';
+import { Client } from 'pg';
 
 export const getProducts = async event => {
   console.log('getProducts EVENT: ', event);
 
-  const client = await connectDb();
+  const client: Client = await connectDb();
 
   if (!client) {
     return res().sendInternal();
@@ -43,6 +44,6 @@ export const getProducts = async event => {
     console.error(err);
     return res().sendInternal();
   } finally {
-    client.end();
+    await client.end();
   }
 };
