@@ -1,14 +1,16 @@
-import { Client } from 'pg';
-import { dbOptions } from './common/db-options';
+import { connectDb } from './common/connect-db';
+import { res } from './common/res';
 
 export const createProduct = async event => {
   console.log('createProduct EVENT: ', event);
 
-  const client = new Client(dbOptions);
+  const client = await connectDb();
+
+  if (!client) {
+    return res().sendInternal();
+  }
 
   try {
-    await client.connect();
-
     const entity = JSON.parse(event.body);
     const {title, description, price, count} = entity;
     await client.query('BEGIN');
@@ -24,41 +26,19 @@ export const createProduct = async event => {
 
     const [product] = rows;
 
-    return {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'application/json'
-      },
-      statusCode: 201,
-      body: JSON.stringify(product)
-    };
+    return res().status(201).json(product);
   } catch (err) {
     await client.query('ROLLBACK');
 
     console.error(err);
 
-    let statusCode = 500;
-    let body = 'Internal Server Error';
-    let contentType = 'text/html';
-
     if (err.code === '23505') {
-      contentType = 'application/json';
-      statusCode = 409;
-      body = JSON.stringify({
+      return res().status(409).json({
         message: err.detail.replace(/Key/i, 'Product with')
       });
     }
 
-    return {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': contentType,
-      },
-      statusCode,
-      body
-    };
+    return res().sendInternal();
   } finally {
     client.end();
   }

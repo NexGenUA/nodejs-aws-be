@@ -1,13 +1,16 @@
-import { Client } from 'pg';
-import { dbOptions } from './common/db-options';
+import { connectDb } from './common/connect-db';
+import { res } from './common/res';
 
 export const getProducts = async event => {
   console.log('getProducts EVENT: ', event);
 
-  const client = new Client(dbOptions);
+  const client = await connectDb();
+
+  if (!client) {
+    return res().sendInternal();
+  }
 
   try {
-    await client.connect();
 
     await client.query(`
       CREATE extension if NOT EXISTS "uuid-ossp"
@@ -35,26 +38,10 @@ export const getProducts = async event => {
       SELECT p.id, p.description, p.price, p.title, s.count FROM products p LEFT JOIN stock s on p.id=s.product_id
     `);
 
-    return {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'application/json'
-      },
-      statusCode: 200,
-      body: JSON.stringify(productList)
-    };
+    return res().json(productList);
   } catch (err) {
     console.error(err);
-    return {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'text/html'
-      },
-      statusCode: 500,
-      body: 'Internal Server Error'
-    };
+    return res().sendInternal();
   } finally {
     client.end();
   }
