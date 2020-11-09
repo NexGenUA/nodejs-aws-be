@@ -1,6 +1,7 @@
 import { ClientConfig } from 'pg';
+import { config } from './config';
 
-const {PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD} = process.env;
+const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = config;
 
 export const dbOptions: ClientConfig = {
   host: PG_HOST,

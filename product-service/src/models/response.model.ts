@@ -19,5 +19,5 @@ export type ResponseType = ResponseObject | ResponseObject[];
 export interface HttpResponse {
   headers: Headers
   statusCode: number;
-  body?: object | string;
+  body?: string;
 }
