@@ -1,3 +1,12 @@
-# Backend aws-course
+# Backend aws
 
-- Link to PR: [https://github.com/NexGenUA/nodejs-aws-be/pull/1](https://github.com/NexGenUA/nodejs-aws-be/pull/1)
+**Used services:**
+  - S3
+  - CloudFront
+  - CloudFormation
+  - RDS
+  - Lambda
+  - API Gateway
+  - IAM
+
+### Documentation: [https://app.swaggerhub.com/apis-docs/NexGenUA/aws-shop/1.0.0](https://app.swaggerhub.com/apis-docs/NexGenUA/aws-shop/1.0.0)
