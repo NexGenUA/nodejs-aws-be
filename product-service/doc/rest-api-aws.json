@@ -1,0 +1,82 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.1",
+    "title": "dev-aws-be-nexgenua"
+  },
+  "host": "70t3w2t0ni.execute-api.eu-west-1.amazonaws.com",
+  "basePath": "/dev",
+  "paths": {
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get all products",
+        "description": "Gets all products (array)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get product by id",
+        "description": "Get product by id (object)",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
