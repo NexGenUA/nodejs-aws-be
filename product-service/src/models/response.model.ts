@@ -1,9 +1,11 @@
+import { APIGatewayProxyResult } from 'aws-lambda';
+
 export declare class HttpClassResponse {
-  send(message: string): HttpResponse;
-  json(responseObject: ResponseType): HttpResponse;
+  send(message: string): APIGatewayProxyResult;
+  json(responseObject: ResponseType): APIGatewayProxyResult;
   headers(headers: Headers): HttpClassResponse;
   status(status: number): HttpClassResponse;
-  sendInternal(): HttpResponse;
+  sendInternal(): APIGatewayProxyResult;
 }
 
 export interface Headers {
@@ -15,9 +17,3 @@ export interface ResponseObject {
 }
 
 export type ResponseType = ResponseObject | ResponseObject[];
-
-export interface HttpResponse {
-  headers: Headers
-  statusCode: number;
-  body?: string;
-}

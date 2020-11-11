@@ -1,4 +1,5 @@
 import type { Serverless } from 'serverless/aws';
+import { ApiGateway } from 'serverless/plugins/aws/provider/awsProvider';
 
 const serverlessConfiguration: Serverless = {
   service: 'aws-be-nexgenua',
@@ -13,6 +14,9 @@ const serverlessConfiguration: Serverless = {
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
+    apiGateway: {
+      shouldStartNameWithService: true
+    } as ApiGateway,
     stage: 'dev',
     region: 'eu-west-1'
   },

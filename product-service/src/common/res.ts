@@ -1,9 +1,10 @@
-import { Headers, HttpClassResponse, HttpResponse, ResponseType } from '../models/response.model';
+import { Headers, HttpClassResponse, ResponseType } from '../models/response.model';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
 class Response implements HttpClassResponse {
   _headers: Headers;
   _statusCode: number;
-  _response: HttpResponse;
+  _response: APIGatewayProxyResult;
 
   constructor() {
     this._headers = {
@@ -15,31 +16,31 @@ class Response implements HttpClassResponse {
     this._response = {
       headers: this._headers,
       statusCode: this._statusCode,
+      body: '',
     };
   }
 
-  send(message: string): HttpResponse {
+  send(message: string): APIGatewayProxyResult {
     this._response.body = message;
     this.headers({
-      'Content-Type': 'text/html'
+      'Content-Type': 'text/html',
     });
     return this._response;
   }
 
-  json(responseObject: ResponseType): HttpResponse {
+  json(responseObject: ResponseType): APIGatewayProxyResult {
     this._response.body = JSON.stringify(responseObject);
     this.headers({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
     return this._response;
   }
 
   headers(headers: Headers): HttpClassResponse {
-    this._headers = (
-      this._response.headers = {
+    this._headers = this._response.headers = {
       ...this._headers,
-      ...headers
-    });
+      ...headers,
+    };
     return this;
   }
 
@@ -48,10 +49,10 @@ class Response implements HttpClassResponse {
     return this;
   }
 
-  sendInternal(): HttpResponse {
+  sendInternal(): APIGatewayProxyResult {
     this._response.body = 'Internal Server Error';
     this.headers({
-      'Content-Type': 'text/html'
+      'Content-Type': 'text/html',
     });
     this.status(500);
     return this._response;

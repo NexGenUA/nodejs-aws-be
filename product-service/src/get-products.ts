@@ -1,8 +1,9 @@
 import { connectDb } from './common/connect-db';
 import { res } from './common/res';
 import { Client } from 'pg';
+import { APIGatewayProxyHandler } from 'aws-lambda';
 
-export const getProducts = async event => {
+export const getProducts: APIGatewayProxyHandler = async (event) => {
   console.log('getProducts EVENT: ', event);
 
   const client: Client = await connectDb();
@@ -12,7 +13,6 @@ export const getProducts = async event => {
   }
 
   try {
-
     await client.query(`
       CREATE extension if NOT EXISTS "uuid-ossp"
     `);
@@ -35,7 +35,7 @@ export const getProducts = async event => {
       )
     `);
 
-    const {rows: productList} = await client.query(`
+    const { rows: productList } = await client.query(`
       SELECT p.id, p.description, p.price, p.title, s.count FROM products p LEFT JOIN stock s on p.id=s.product_id
     `);
 
