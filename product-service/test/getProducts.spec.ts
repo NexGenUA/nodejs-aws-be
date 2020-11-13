@@ -1,14 +1,10 @@
-import { getProducts } from '../src/get-products';
-import { APIGatewayProxyResult } from 'aws-lambda';
+import { getProducts } from '../src/handlers/get-products';
 import { Product } from '../src/models/product.model';
 
 test('Products', async () => {
-  const response: APIGatewayProxyResult | void = await getProducts(null, null, null);
-  let products: Product[];
-
-  if (response) {
-    products = JSON.parse(response.body);
-  }
+  const response: any = await getProducts(null, null, null);
+  const products: Product[] = JSON.parse(response.body);
+  const NUMBERS_OF_PRODUCT_PROPERTIES = 5;
 
   products.forEach((product) => {
     expect(product).toHaveProperty('id');
@@ -21,6 +17,6 @@ test('Products', async () => {
     expect(typeof product.price).toBe('number');
     expect(typeof product.title).toBe('string');
     expect(typeof product.count).toBe('number');
-    expect(Object.keys(product).length).toBe(5);
+    expect(Object.keys(product).length).toBe(NUMBERS_OF_PRODUCT_PROPERTIES);
   });
 });

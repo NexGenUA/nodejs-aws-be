@@ -1,0 +1,5 @@
+{
+  "*.ts,js,scss": [
+    "npm run prettier"
+  ]
+}

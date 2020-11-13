@@ -1,9 +1,5 @@
-import { getProductById } from './src/get-product-by-id';
-import { getProducts } from './src/get-products';
-import { createProduct } from './src/create-product';
+import { getProductById } from './src/handlers/get-product-by-id';
+import { getProducts } from './src/handlers/get-products';
+import { createProduct } from './src/handlers/create-product';
 
-export {
-  getProductById,
-  getProducts,
-  createProduct
-}
+export { getProductById, getProducts, createProduct };

@@ -7,18 +7,18 @@ const serverlessConfiguration: Serverless = {
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true
-    }
+      includeModules: true,
+    },
   },
   plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
     apiGateway: {
-      shouldStartNameWithService: true
+      shouldStartNameWithService: true,
     } as ApiGateway,
     stage: 'dev',
-    region: 'eu-west-1'
+    region: 'eu-west-1',
   },
   functions: {
     getProducts: {
@@ -28,10 +28,10 @@ const serverlessConfiguration: Serverless = {
           http: {
             path: 'products',
             method: 'get',
-            cors: true
-          }
-        }
-      ]
+            cors: true,
+          },
+        },
+      ],
     },
     getProductById: {
       handler: 'handler.getProductById',
@@ -44,13 +44,13 @@ const serverlessConfiguration: Serverless = {
             request: {
               parameters: {
                 paths: {
-                  productId: true
-                }
-              }
-            }
-          }
-        }
-      ]
+                  productId: true,
+                },
+              },
+            },
+          },
+        },
+      ],
     },
     createProduct: {
       handler: 'handler.createProduct',
@@ -62,13 +62,13 @@ const serverlessConfiguration: Serverless = {
             cors: true,
             request: {
               schema: {
-                'application/json': '${file(./src/schemas/product-schema.json)}'
-              }
-            }
-          }
-        }
-      ]
-    }
+                'application/json': '${file(./src/schemas/product-schema.json)}',
+              },
+            },
+          },
+        },
+      ],
+    },
   },
   resources: {
     Resources: {
@@ -77,16 +77,16 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           ResponseParameters: {
             'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'"
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
           },
           ResponseType: 'DEFAULT_4XX',
           RestApiId: {
-            Ref: 'ApiGatewayRestApi'
-          }
-        }
-      }
-    }
-  }
-}
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
+    },
+  },
+};
 
 module.exports = serverlessConfiguration;

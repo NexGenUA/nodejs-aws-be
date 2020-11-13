@@ -1,4 +1,4 @@
-import { Headers, HttpClassResponse, ResponseType } from '../models/response.model';
+import { Headers, HttpClassResponse, ResponseType } from './models/response.model';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
 class Response implements HttpClassResponse {

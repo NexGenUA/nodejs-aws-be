@@ -1,0 +1,10 @@
+{
+  "name": "nodejs-aws",
+  "version": "1.0.0",
+  "description": "aws project",
+  "author": "NexGen",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/serverless": "^1.78.8"
+  }
+}

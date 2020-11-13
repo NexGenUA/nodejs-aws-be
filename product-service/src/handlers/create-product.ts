@@ -1,7 +1,7 @@
-import { connectDb } from './common/connect-db';
-import { res } from './common/res';
+import { connectDb } from '../common/connect-db';
+import { res } from '../../../common/res';
 import { Client } from 'pg';
-import { Product } from './models/product.model';
+import { Product } from '../models/product.model';
 import { APIGatewayProxyHandler } from 'aws-lambda';
 
 export const createProduct: APIGatewayProxyHandler = async (event) => {
