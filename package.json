@@ -5,6 +5,7 @@
   "author": "NexGen",
   "license": "ISC",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.64",
     "@types/serverless": "^1.78.8"
   }
 }

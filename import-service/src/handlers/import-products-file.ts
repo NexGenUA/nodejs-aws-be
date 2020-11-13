@@ -18,10 +18,10 @@ export const importProductsFile: APIGatewayProxyHandler = async (event) => {
       Bucket: BUCKET,
       Key: path,
       Expires: 60,
-      ContentType: 'application/vnd.ms-excel',
+      ContentType: 'text/csv',
     };
 
-    const url = await s3.getSignedUrl('putObject', params);
+    const url = await s3.getSignedUrlPromise('putObject', params);
 
     return res().send(url);
   } catch (err) {

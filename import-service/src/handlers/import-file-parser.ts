@@ -54,7 +54,9 @@ export const importFileParser: S3Handler = async (event) => {
     }
 
     await Promise.allSettled(s3Streams);
+    return;
   } catch (err) {
     console.error(err);
+    return;
   }
 };
