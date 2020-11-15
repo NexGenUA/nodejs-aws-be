@@ -13,5 +13,5 @@
   "plugins": [
     "@typescript-eslint"
   ],
-  "ignorePatterns": ["*.spec.ts"]
+  "ignorePatterns": ["*.spec.ts", "webpack.config.js"]
 }
