@@ -10,7 +10,7 @@ export const dbOptions: ClientConfig = {
   user: PG_USERNAME,
   password: PG_PASSWORD,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
   },
-  connectionTimeoutMillis: 5000
+  connectionTimeoutMillis: 5000,
 };

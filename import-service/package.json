@@ -1,7 +1,7 @@
 {
-  "name": "product-service-aws",
+  "name": "import-service-aws",
   "version": "1.0.0",
-  "description": "Product service (API based)",
+  "description": "Import service (API based)",
   "main": "handler.ts",
   "scripts": {
     "lint": "eslint src/**/*.ts",
@@ -9,7 +9,7 @@
     "prettier": "prettier --write src/**/*.ts"
   },
   "dependencies": {
-    "pg": "^8.4.2"
+    "csv-parser": "^2.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -22,6 +22,8 @@
     "@types/serverless": "^1.78.8",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
+    "aws-sdk": "^2.792.0",
+    "aws-sdk-mock": "^5.1.0",
     "babel-jest": "^26.6.3",
     "eslint": "^7.13.0",
     "eslint-config-prettier": "^6.15.0",
@@ -31,7 +33,6 @@
     "jest": "^26.6.3",
     "lint-staged": "^10.5.1",
     "prettier": "^2.1.2",
-    "serverless-dotenv-plugin": "^3.1.0",
     "serverless-webpack": "^5.3.5",
     "ts-jest": "^26.4.4",
     "ts-loader": "^5.4.5",
