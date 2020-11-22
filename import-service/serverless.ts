@@ -32,7 +32,19 @@ const serverlessConfiguration: Serverless = {
         Action: 's3:*',
         Resource: `arn:aws:s3:::${BUCKET}/*`,
       },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn'],
+        },
+      },
     ],
+    environment: {
+      SQS_URL: {
+        Ref: 'SQSQueue',
+      },
+    },
   },
   functions: {
     importProductsFile: {
@@ -71,6 +83,28 @@ const serverlessConfiguration: Serverless = {
           },
         },
       ],
+    },
+  },
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'import-service-queue',
+        },
+      },
+    },
+    Outputs: {
+      SQSQueueUrl: {
+        Value: {
+          Ref: 'SQSQueue',
+        },
+      },
+      SQSQueueArn: {
+        Value: {
+          'Fn::GetAtt': ['SQSQueue', 'Arn'],
+        },
+      },
     },
   },
 };

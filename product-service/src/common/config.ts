@@ -11,4 +11,5 @@ export const config = {
   PG_DATABASE: process.env.PG_DATABASE,
   PG_USERNAME: process.env.PG_USERNAME,
   PG_PASSWORD: process.env.PG_PASSWORD,
+  EMAIL: process.env.EMAIL,
 };

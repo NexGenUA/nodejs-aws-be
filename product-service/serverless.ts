@@ -1,5 +1,6 @@
 import type { Serverless } from 'serverless/aws';
 import { ApiGateway } from 'serverless/plugins/aws/provider/awsProvider';
+import { config } from './src/common/config';
 
 const serverlessConfiguration: Serverless = {
   service: 'aws-be-nexgenua',
@@ -19,6 +20,27 @@ const serverlessConfiguration: Serverless = {
     } as ApiGateway,
     stage: 'dev',
     region: 'eu-west-1',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: ['${cf:import-service-${self:provider.stage}.SQSQueueArn}'],
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: [
+          {
+            Ref: 'SNSTopic',
+          },
+        ],
+      },
+    ],
+    environment: {
+      SNS_ARN: {
+        Ref: 'SNSTopic',
+      },
+    },
   },
   functions: {
     getProducts: {
@@ -69,6 +91,17 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    catalogBatchProcess: {
+      handler: 'handler.catalogBatchProcess',
+      events: [
+        {
+          sqs: {
+            batchSize: 2,
+            arn: ['${cf:import-service-${self:provider.stage}.SQSQueueArn}'],
+          },
+        },
+      ],
+    },
   },
   resources: {
     Resources: {
@@ -82,6 +115,22 @@ const serverlessConfiguration: Serverless = {
           ResponseType: 'DEFAULT_4XX',
           RestApiId: {
             Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'import-service-topic',
+        },
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: config.EMAIL,
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic',
           },
         },
       },
