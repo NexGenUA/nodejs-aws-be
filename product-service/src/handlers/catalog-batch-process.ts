@@ -37,10 +37,18 @@ export const catalogBatchProcess: SQSHandler = async (event) => {
 
       await client.query('COMMIT');
 
+      const counts: string = item.count < 2 ? 'run out' : 'good';
+
       const message = await sns
         .publish({
           Subject: 'Products successful added',
           Message: JSON.stringify(item),
+          MessageAttributes: {
+            counts: {
+              DataType: 'String',
+              StringValue: counts,
+            },
+          },
           TopicArn: process.env.SNS_ARN,
         })
         .promise();

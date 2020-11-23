@@ -129,6 +129,18 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           Endpoint: config.EMAIL,
           Protocol: 'email',
+          FilterPolicy: { counts: ['good'] },
+          TopicArn: {
+            Ref: 'SNSTopic',
+          },
+        },
+      },
+      SNSRunOutSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: config.EMAIL_TROUBLE,
+          Protocol: 'email',
+          FilterPolicy: { counts: ['run out'] },
           TopicArn: {
             Ref: 'SNSTopic',
           },
