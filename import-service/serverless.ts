@@ -94,14 +94,14 @@ const serverlessConfiguration: Serverless = {
   },
   resources: {
     Resources: {
-      GatewayResponseDefault400: {
+      GatewayResponseUnauthorized: {
         Type: 'AWS::ApiGateway::GatewayResponse',
         Properties: {
           ResponseParameters: {
             'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
             'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
           },
-          ResponseType: 'DEFAULT_4XX',
+          ResponseType: 'UNAUTHORIZED',
           RestApiId: {
             Ref: 'ApiGatewayRestApi',
           },
@@ -118,6 +118,23 @@ const serverlessConfiguration: Serverless = {
           ResponseTemplates: {
             'application/json': '{"message":"$context.authorizer.message"}',
           },
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
+      GatewayResponseInvalidToken: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'AUTHORIZER_FAILURE',
+          ResponseTemplates: {
+            'application/json': '{"message":"Error: Invalid token"}',
+          },
+          StatusCode: 401,
           RestApiId: {
             Ref: 'ApiGatewayRestApi',
           },

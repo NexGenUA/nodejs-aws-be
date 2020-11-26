@@ -12,7 +12,7 @@ export const basicAuthorizer: APIGatewayTokenAuthorizerHandler = async (event) =
     const isBasic = /^Basic\s[^\s]+/.test(authString);
 
     if (!isBasic) {
-      throwUnauthorized();
+      throwUnauthorized('Error: Invalid token');
     }
 
     const token = authString.replace(/Basic\s/, '');
@@ -20,19 +20,19 @@ export const basicAuthorizer: APIGatewayTokenAuthorizerHandler = async (event) =
     const [login, password] = token.split(':');
 
     const validPassword = process.env[login];
-
     let effect = 'Allow';
+
+    let message = 'Success';
 
     if (!validPassword || validPassword !== password) {
       effect = 'Deny';
+      message = 'Login or password is wrong. Access denied';
     }
-
-    const message = 'Login or password is wrong. Access denied';
 
     return generatePolicy(token, event.methodArn, effect, message);
   } catch (err) {
     console.error(err);
-    throwUnauthorized();
+    throwUnauthorized(err);
   }
 };
 
@@ -55,6 +55,6 @@ const generatePolicy = (principalId, resource, effect, message): APIGatewayAutho
   };
 };
 
-const throwUnauthorized = () => {
-  throw new Error('Unauthorized');
+const throwUnauthorized = (message = 'Unauthorized') => {
+  throw new Error(message);
 };
