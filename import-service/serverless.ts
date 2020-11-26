@@ -107,6 +107,22 @@ const serverlessConfiguration: Serverless = {
           },
         },
       },
+      GatewayResponseAccessDenied: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'ACCESS_DENIED',
+          ResponseTemplates: {
+            'application/json': '{"message":"$context.authorizer.message"}',
+          },
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
       SQSQueue: {
         Type: 'AWS::SQS::Queue',
         Properties: {
