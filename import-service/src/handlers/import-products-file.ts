@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { res } from '../../../common/res';
+import { res } from '../../../shared/common/res';
 import AWS from 'aws-sdk';
 import S3 from 'aws-sdk/clients/s3';
 

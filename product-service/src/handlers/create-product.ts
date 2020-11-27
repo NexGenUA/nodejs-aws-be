@@ -1,5 +1,5 @@
 import { connectDb } from '../common/connect-db';
-import { res } from '../../../common/res';
+import { res } from '../../../shared/common/res';
 import { Client } from 'pg';
 import { Product } from '../models/product.model';
 import { APIGatewayProxyHandler } from 'aws-lambda';
