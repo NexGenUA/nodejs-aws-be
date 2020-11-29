@@ -1,0 +1,112 @@
+service: cognito-service
+
+frameworkVersion: '2'
+
+plugins:
+  - aws-cognito-idp-userpool-domain
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-1
+  stage: dev
+
+custom:
+  region: eu-west-1
+  stage: dev
+  callback_url: ${env:frontend_url}
+
+resources:
+  Resources:
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        MfaConfiguration: OFF
+        AccountRecoverySetting:
+          RecoveryMechanisms:
+            - Name: admin_only
+              Priority: 1
+        AutoVerifiedAttributes:
+          - email
+        UserPoolName: user-pool-products-service-${self:custom.stage}
+        UsernameConfiguration:
+          CaseSensitive: false
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 6
+            RequireLowercase: false
+            RequireNumbers: false
+            RequireSymbols: false
+            RequireUppercase: false
+        Schema:
+          - Name: email
+            Required: true
+            Mutable: true
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: task-7-test-${self:custom.stage}-user-pool-client
+        UserPoolId:
+          Ref: CognitoUserPool
+        GenerateSecret: false
+        SupportedIdentityProviders:
+          - COGNITO
+        PreventUserExistenceErrors: ENABLED
+        AllowedOAuthFlowsUserPoolClient: true
+        AllowedOAuthFlows:
+          - implicit
+        AllowedOAuthScopes:
+          - phone
+          - email
+          - openid
+          - aws.cognito.signin.user.admin
+          - profile
+        CallbackURLs:
+          - ${self:custom.callback_url}
+        IdTokenValidity: 5
+        AccessTokenValidity: 5
+        ReadAttributes:
+          - address
+          - nickname
+          - name
+          - birthdate
+          - email
+          - picture
+          - gender
+          - profile
+          - zoneinfo
+          - locale
+          - website
+          - family_name
+          - phone_number
+          - phone_number_verified
+          - email_verified
+          - preferred_username
+          - given_name
+          - updated_at
+          - middle_name
+        WriteAttributes:
+          - address
+          - nickname
+          - name
+          - birthdate
+          - email
+          - picture
+          - gender
+          - profile
+          - zoneinfo
+          - locale
+          - website
+          - family_name
+          - phone_number
+          - preferred_username
+          - given_name
+          - updated_at
+          - middle_name
+  Outputs:
+    CognitoUserPoolArn:
+      Value:
+        Fn::GetAtt:
+         - CognitoUserPool
+         - Arn

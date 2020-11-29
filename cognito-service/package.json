@@ -1,0 +1,15 @@
+{
+  "name": "cognito-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "NexGen",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-cognito-idp-userpool-domain": "^0.1.5",
+    "aws-sdk": "^2.799.0",
+    "serverless-dotenv-plugin": "^3.1.0"
+  }
+}
