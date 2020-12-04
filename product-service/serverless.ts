@@ -51,12 +51,12 @@ const serverlessConfiguration: Serverless = {
             path: 'products',
             method: 'get',
             cors: true,
-            authorizer: {
-              name: 'CognitoAuthorizer',
-              type: 'COGNITO_USER_POOLS',
-              arn: '${cf:cognito-service-${self:provider.stage}.CognitoUserPoolArn}',
-              identitySource: 'method.request.header.Authorization',
-            },
+            // authorizer: {
+            //   name: 'CognitoAuthorizer',
+            //   type: 'COGNITO_USER_POOLS',
+            //   arn: '${cf:cognito-service-${self:provider.stage}.CognitoUserPoolArn}',
+            //   identitySource: 'method.request.header.Authorization',
+            // },
           },
         },
       ],

@@ -55,13 +55,13 @@ const serverlessConfiguration: Serverless = {
             path: 'import',
             method: 'get',
             cors: true,
-            authorizer: {
-              name: 'tokenAuthorizer',
-              arn: '${cf:authorization-service-${self:provider.stage}.basicAuthorizerArn}',
-              resultTtlInSeconds: 0,
-              identitySource: 'method.request.header.Authorization',
-              type: 'token',
-            },
+            // authorizer: {
+            //   name: 'tokenAuthorizer',
+            //   arn: '${cf:authorization-service-${self:provider.stage}.basicAuthorizerArn}',
+            //   resultTtlInSeconds: 0,
+            //   identitySource: 'method.request.header.Authorization',
+            //   type: 'token',
+            // },
             request: {
               parameters: {
                 querystrings: {
