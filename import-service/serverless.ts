@@ -55,6 +55,13 @@ const serverlessConfiguration: Serverless = {
             path: 'import',
             method: 'get',
             cors: true,
+            // authorizer: {
+            //   name: 'tokenAuthorizer',
+            //   arn: '${cf:authorization-service-${self:provider.stage}.basicAuthorizerArn}',
+            //   resultTtlInSeconds: 0,
+            //   identitySource: 'method.request.header.Authorization',
+            //   type: 'token',
+            // },
             request: {
               parameters: {
                 querystrings: {
@@ -87,6 +94,52 @@ const serverlessConfiguration: Serverless = {
   },
   resources: {
     Resources: {
+      GatewayResponseUnauthorized: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'UNAUTHORIZED',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
+      GatewayResponseAccessDenied: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'ACCESS_DENIED',
+          ResponseTemplates: {
+            'application/json': '{"message":"$context.authorizer.message"}',
+          },
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
+      GatewayResponseInvalidToken: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'AUTHORIZER_FAILURE',
+          ResponseTemplates: {
+            'application/json': '{"message":"Error: Invalid token"}',
+          },
+          StatusCode: 401,
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
       SQSQueue: {
         Type: 'AWS::SQS::Queue',
         Properties: {
