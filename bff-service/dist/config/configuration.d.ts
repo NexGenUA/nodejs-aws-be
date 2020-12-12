@@ -1,0 +1,2 @@
+import { ConfigModel } from '../models/config.model';
+export declare const configuration: () => ConfigModel;

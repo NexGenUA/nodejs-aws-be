@@ -15,3 +15,7 @@ mock/
 
 # credentials
 .env
+
+# Elastic Beanstalk Files
+.elasticbeanstalk
+.ebextensions
