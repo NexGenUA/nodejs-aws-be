@@ -32,12 +32,12 @@ fi \
 && echo '### Complete 2/5' \
 && echo '### Archiving...' \
 && cd $UPLOAD_PATH \
-&& zip -r ../$ARCHIVE_NAME ./ &>/dev/null \
+&& bestzip ../$ARCHIVE_NAME ./ &>/dev/null \
 && cd ../.. \
 && echo '### Complete 3/5' \
 && echo '### Deploying...' \
-&& sed '/deploy*/d;/test\.com/d' -i $EB_CONFIG \
-&& sed '/artifact*/d;/test\.com/d' -i $EB_CONFIG \
+&& grep -v "deploy" $EB_CONFIG > tmp && mv tmp $EB_CONFIG \
+&& grep -v "artifact" $EB_CONFIG > tmp && mv tmp $EB_CONFIG \
 && printf '%s\n  %s\n' 'deploy:' 'artifact: '$EB_PATH/$ARCHIVE_NAME >> $EB_CONFIG \
 && eb deploy --staged \
 && echo 'Complete 4/5'
@@ -46,6 +46,6 @@ fi \
 echo '### Remove created files...'
 rm -rf $EB_PATH/$ARCHIVE_NAME &>/dev/null
 rm -rf $UPLOAD_PATH &>/dev/null
-sed '/deploy*/d;/test\.com/d' -i $EB_CONFIG
-sed '/artifact*/d;/test\.com/d' -i $EB_CONFIG
+grep -v "deploy" $EB_CONFIG > tmp && mv tmp $EB_CONFIG
+grep -v "artifact" $EB_CONFIG > tmp && mv tmp $EB_CONFIG
 echo '### All completed 5/5'

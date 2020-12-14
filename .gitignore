@@ -16,6 +16,10 @@ mock/
 # credentials
 .env
 
+# Build folders
+dist
+public
+
 # Elastic Beanstalk Files
 .elasticbeanstalk
 .ebextensions

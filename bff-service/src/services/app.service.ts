@@ -9,6 +9,8 @@ import { AxiosResponse, AxiosRequestConfig, Method } from 'axios';
 import { configuration } from '../config/configuration';
 import { CacheService } from './cache.service';
 
+const dataMethods = new Set(['post', 'put', 'patch']);
+
 @Injectable()
 export class AppService {
   constructor(
@@ -35,7 +37,7 @@ export class AppService {
       method: method as Method,
     };
 
-    if (data && Object.keys(data).length && method === 'post') {
+    if (data && Object.keys(data).length && dataMethods.has(method)) {
       axiosConfig = { ...axiosConfig, data };
     } else if (method === 'post') {
       axiosConfig = { ...axiosConfig, data: {} };
@@ -45,12 +47,8 @@ export class AppService {
       if (this.cacheService.isData()) {
         return Promise.resolve({
           status: 200,
-          headers: {
-            'access-control-allow-origin': '*',
-            'Content-Type': 'application/json; charset=utf-8',
-            'x-cache': 'proxy cache',
-          },
-          data: this.cacheService.get(),
+          headers: this.cacheService.get().headers,
+          data: this.cacheService.get().data,
         });
       }
     }
@@ -60,7 +58,7 @@ export class AppService {
         (res: AxiosResponse) => {
           const { status, headers, data } = res;
           if (url === 'products/' && method === 'get') {
-            this.cacheService.set(data);
+            this.cacheService.set({ data, headers });
           }
           resolve({ status, headers, data });
         },

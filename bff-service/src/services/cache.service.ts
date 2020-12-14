@@ -5,19 +5,24 @@ import { CacheModel } from '../models/cache.model';
 @Injectable()
 export class CacheService {
   private readonly cache: CacheModel = {
+    headers: {},
     data: [],
     expDate: 0,
   };
 
   private readonly expTime: number = 120000;
 
-  set(cache: any[]) {
-    this.cache.data = cache;
+  set(cache: CacheModel) {
+    this.cache.data = cache.data;
+    this.cache.headers = cache.headers;
     this.cache.expDate = Date.now() + this.expTime;
   }
 
-  get(): any[] {
-    return this.cache.data;
+  get(): CacheModel {
+    return {
+      data: this.cache.data,
+      headers: this.cache.headers,
+    };
   }
 
   isData(): boolean {
