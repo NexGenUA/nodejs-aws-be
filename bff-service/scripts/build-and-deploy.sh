@@ -1,7 +1,6 @@
 #!/bin/bash
 
-TIMESTAMP="$(date +%Y-%m-%d_%H-%M-%S)"
-ARCHIVE_NAME=deploy-$TIMESTAMP.zip
+ARCHIVE_NAME=deploy.zip
 BUILD_FOLDER=dist
 EB_PATH=./.elasticbeanstalk
 EB_CONFIG=$EB_PATH/config.yml
@@ -27,18 +26,15 @@ echo '### Creating build...' \
     && cd ../..
 fi \
 && cp -r $MODULES_DIR/* $UPLOAD_PATH \
-&& cp -rf ./.ebextensions $UPLOAD_PATH &>/dev/null | true \
+&& cp -rf ./.ebextensions $_ &>/dev/null | true \
 && cp -rf ./Procfile $UPLOAD_PATH &>/dev/null | true \
 && echo '### Complete 2/5' \
 && echo '### Archiving...' \
 && cd $UPLOAD_PATH \
-&& bestzip ../$ARCHIVE_NAME ./ &>/dev/null \
+&& bestzip ../$ARCHIVE_NAME ./ 1>/dev/null \
 && cd ../.. \
 && echo '### Complete 3/5' \
 && echo '### Deploying...' \
-&& grep -v "deploy" $EB_CONFIG > tmp && mv tmp $EB_CONFIG \
-&& grep -v "artifact" $EB_CONFIG > tmp && mv tmp $EB_CONFIG \
-&& printf '%s\n  %s\n' 'deploy:' 'artifact: '$EB_PATH/$ARCHIVE_NAME >> $EB_CONFIG \
 && eb deploy --staged \
 && echo 'Complete 4/5'
 
@@ -46,6 +42,4 @@ fi \
 echo '### Remove created files...'
 rm -rf $EB_PATH/$ARCHIVE_NAME &>/dev/null
 rm -rf $UPLOAD_PATH &>/dev/null
-grep -v "deploy" $EB_CONFIG > tmp && mv tmp $EB_CONFIG
-grep -v "artifact" $EB_CONFIG > tmp && mv tmp $EB_CONFIG
 echo '### All completed 5/5'

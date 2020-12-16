@@ -5,6 +5,8 @@
   - CloudFront
   - CloudFormation
   - CloudWatch
+  - Cognito
+  - EC2
   - RDS
   - Lambda
   - API Gateway
@@ -13,5 +15,3 @@
   - SQS
   - Elastic Beanstalk
   - Elastic Container Registry 
-  
-### Documentation: [https://app.swaggerhub.com/apis-docs/NexGenUA/aws-shop/1.0.0](https://app.swaggerhub.com/apis-docs/NexGenUA/aws-shop/1.0.0)
